@@ -12,7 +12,7 @@ This is a static website for Stellar Rush. It can be hosted on GitHub Pages, Net
 
 Replace these placeholders if needed:
 
-- `support@stellar-rush.app` in `privacy-policy.html` and `support.html`
+- `support@playstellarrush.com` in `privacy-policy.html` and `support.html`
 - `href="#"` for the App Store button in `index.html` once the app has a live App Store URL
 
 ## App Store Connect URLs
