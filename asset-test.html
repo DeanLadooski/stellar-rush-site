@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stellar Rush Asset Test</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        color: white;
+        background: #030815;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+        max-width: 980px;
+      }
+
+      .card {
+        padding: 14px;
+        border: 1px solid rgba(138, 205, 255, 0.28);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        max-height: 360px;
+        object-fit: contain;
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+      }
+
+      code {
+        display: block;
+        margin-top: 10px;
+        color: #9feaff;
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stellar Rush Asset Test</h1>
+    <p>If these images do not load at <strong>playstellarrush.com</strong>, the deployed site is missing the <code>assets</code> folder or GitHub Pages is serving a different branch/folder.</p>
+    <div class="grid">
+      <div class="card">
+        <img src="/assets/app-icon.png" alt="App icon">
+        <code>/assets/app-icon.png</code>
+      </div>
+      <div class="card">
+        <img src="/assets/menu-screenshot.png" alt="Menu screenshot">
+        <code>/assets/menu-screenshot.png</code>
+      </div>
+      <div class="card">
+        <img src="/assets/ship-premium.png" alt="Premium ship">
+        <code>/assets/ship-premium.png</code>
+      </div>
+      <div class="card">
+        <img src="/assets/ship-og.png" alt="OG ship">
+        <code>/assets/ship-og.png</code>
+      </div>
+    </div>
+  </body>
+</html>
