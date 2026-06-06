@@ -28,8 +28,9 @@ body {
   min-height: 100vh;
   color: var(--text);
   background:
-    linear-gradient(180deg, rgba(1, 4, 12, 0.24), rgba(1, 4, 12, 0.7)),
-    url("assets/menu-background.png") center bottom / cover fixed no-repeat,
+    radial-gradient(circle at 50% 100%, rgba(255, 115, 30, 0.18), transparent 28rem),
+    radial-gradient(circle at 12% 8%, rgba(60, 151, 255, 0.17), transparent 28rem),
+    linear-gradient(180deg, #051126 0%, #030815 46%, #02040b 100%),
     var(--bg);
 }
 
@@ -201,102 +202,36 @@ h1 {
   min-height: 34rem;
 }
 
-.phone {
-  width: min(21.5rem, 82vw);
-  aspect-ratio: 9 / 19.5;
-  position: relative;
-  overflow: hidden;
-  border-radius: 2.4rem;
-  background:
-    linear-gradient(180deg, rgba(2, 8, 23, 0.1), rgba(2, 8, 23, 0.5)),
-    url("assets/menu-background.png") center bottom / cover no-repeat;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 2.8rem 5rem rgba(0, 0, 0, 0.5),
-    inset 0 0 0 0.55rem rgba(1, 4, 12, 0.88),
-    inset 0 0 0 0.68rem rgba(138, 205, 255, 0.12);
-}
-
-.rocket {
-  position: absolute;
-  left: 50%;
-  top: 38%;
-  width: 44%;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 1.2rem 2.2rem rgba(0, 0, 0, 0.46));
-}
-
-.orbit {
-  position: absolute;
-  border: 2px solid rgba(114, 221, 255, 0.34);
-  border-radius: 50%;
-}
-
-.orbit.one {
-  width: 11rem;
-  height: 11rem;
-  left: 1.7rem;
-  top: 7rem;
-}
-
-.orbit.two {
-  width: 13.5rem;
-  height: 13.5rem;
-  right: -2.2rem;
-  top: 13.5rem;
-  border-color: rgba(255, 201, 95, 0.3);
-}
-
-.planet {
-  position: absolute;
-  border-radius: 50%;
-  box-shadow: inset -0.6rem -0.7rem 0 rgba(0, 0, 0, 0.18), 0 0 1.6rem rgba(114, 221, 255, 0.22);
-}
-
-.planet.blue {
-  width: 3rem;
-  height: 3rem;
-  left: 6rem;
-  top: 11rem;
-  background: linear-gradient(135deg, #79e2ff, #1e7bff);
-}
-
-.planet.gold {
-  width: 2.55rem;
-  height: 2.55rem;
-  right: 5.1rem;
-  top: 18.5rem;
-  background: linear-gradient(135deg, #fff2a7, #f0a232);
-}
-
-.phone-ui {
-  position: absolute;
-  inset: 1.1rem 1.4rem auto;
+.screenshot-card {
+  width: min(23rem, 84vw);
+  margin: 0;
   display: grid;
+  gap: 1rem;
   justify-items: center;
-  gap: 0.1rem;
-  font-weight: 900;
-  text-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.4);
 }
 
-.phone-ui strong {
-  font-size: 2.1rem;
+.game-screenshot {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1206 / 2622;
+  object-fit: cover;
+  object-position: center;
+  overflow: hidden;
+  border-radius: 2.15rem;
+  border: 0.46rem solid rgba(2, 6, 18, 0.96);
+  box-shadow:
+    0 3rem 5.5rem rgba(0, 0, 0, 0.58),
+    0 0 0 1px rgba(138, 205, 255, 0.18),
+    0 0 4rem rgba(255, 128, 42, 0.12);
 }
 
-.phone-ui span {
+.screenshot-card figcaption {
+  max-width: 20rem;
+  margin: 0;
   color: var(--muted);
-  font-size: 0.78rem;
-}
-
-.sunline {
-  position: absolute;
-  left: -10%;
-  right: -10%;
-  bottom: -1.8rem;
-  height: 8rem;
-  border-radius: 50% 50% 0 0;
-  background: radial-gradient(circle at 50% 88%, #fff6a3, #ffd24d 26%, #ff7b22 58%, rgba(255, 75, 16, 0.25) 76%, transparent 78%);
-  box-shadow: 0 -1.2rem 3rem rgba(255, 114, 32, 0.35);
+  text-align: center;
+  line-height: 1.45;
+  font-size: 0.95rem;
 }
 
 .section {
@@ -384,26 +319,30 @@ h1 {
 }
 
 .ship-row {
-  display: flex;
-  align-items: end;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
   justify-content: center;
-  gap: clamp(0.6rem, 2vw, 1.2rem);
-  padding: 1.2rem;
-  min-height: 18rem;
+  gap: clamp(0.8rem, 2vw, 1.2rem);
+  padding: 1rem;
+  min-height: 22rem;
   border: 1px solid var(--line);
   border-radius: 1.4rem;
-  background: rgba(2, 8, 23, 0.54);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(124, 70, 255, 0.18), transparent 16rem),
+    rgba(2, 8, 23, 0.64);
   overflow: hidden;
 }
 
 .ship-row img {
-  width: min(30%, 9rem);
+  width: 100%;
+  height: 100%;
+  max-height: 25rem;
   object-fit: contain;
+  padding: 0.3rem;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.28);
   filter: drop-shadow(0 1rem 1.8rem rgba(0, 0, 0, 0.35));
-}
-
-.ship-row img:nth-child(2) {
-  width: min(37%, 11rem);
 }
 
 .legal-page {
@@ -510,7 +449,11 @@ h1 {
     width: 100%;
   }
 
-  .phone {
+  .screenshot-card {
     width: min(19rem, 88vw);
+  }
+
+  .ship-row {
+    grid-template-columns: 1fr;
   }
 }
