@@ -7,10 +7,12 @@ const BOARD_CONFIG = {
     table: "public_leaderboard_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
-    order: "score.desc,created_at.asc",
-    select: "player_name,score,challenge_id,created_at",
+    order: "website_score.desc,created_at.asc",
+    fallbackOrder: "run_value.desc,created_at.asc",
+    select: "player_name,score,highest_altitude,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,challenge_id,created_at",
     mainLabel: "Score",
-    value: (row) => row.score
+    value: adjustedScore
   },
   captures: {
     title: "Top 50 Captures",
@@ -37,19 +39,22 @@ const BOARD_CONFIG = {
     table: "public_leaderboard_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: `eq.${dailyChallengeID()}` },
-    order: "run_value.desc,created_at.asc",
-    select: "player_name,run_value,challenge_id,created_at",
+    order: "website_score.desc,created_at.asc",
+    fallbackOrder: "run_value.desc,created_at.asc",
+    select: "player_name,score,highest_altitude,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,challenge_id,created_at",
     mainLabel: "Daily Score",
-    value: (row) => row.run_value
+    value: adjustedScore
   },
   winners: {
     title: "Previous Daily Winners",
     table: "public_daily_winners",
     fallbackTable: "daily_winners",
     order: "challenge_id.desc",
-    select: "player_name,run_value,challenge_id,created_at",
+    select: "player_name,score,highest_altitude,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,run_value,challenge_id,created_at",
     mainLabel: "Daily Score",
-    value: (row) => row.run_value,
+    value: adjustedScore,
     winners: true
   }
 };
@@ -83,7 +88,7 @@ async function loadBoard(boardKey) {
       data = await fetchRows(config.table, config);
     } catch (error) {
       if (!config.fallbackTable) throw error;
-      data = await fetchRows(config.fallbackTable, config);
+      data = await fetchRows(config.fallbackTable, config, true);
     }
 
     renderRows(data, config);
@@ -100,10 +105,10 @@ async function loadBoard(boardKey) {
   }
 }
 
-async function fetchRows(table, config) {
+async function fetchRows(table, config, useFallback = false) {
   const params = new URLSearchParams({
-    select: config.select,
-    order: config.order,
+    select: useFallback ? (config.fallbackSelect || config.select) : config.select,
+    order: useFallback ? (config.fallbackOrder || config.order) : config.order,
     limit: "50"
   });
 
@@ -173,6 +178,14 @@ function shortDate(value) {
 
 function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(Number(value) || 0);
+}
+
+function adjustedScore(row) {
+  if (Number.isFinite(Number(row.website_score))) {
+    return Number(row.website_score);
+  }
+
+  return Number(row.score || 0) + Math.floor(Number(row.highest_altitude || 0) / 1000);
 }
 
 function escapeHTML(value) {
