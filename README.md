@@ -5,6 +5,7 @@ This is a static website for Stellar Rush. It can be hosted on GitHub Pages, Net
 ## Pages
 
 - `index.html` - marketing home page
+- `leaderboards.html` - public Supabase-powered leaderboards
 - `privacy-policy.html` - App Store Connect privacy policy URL
 - `support.html` - App Store Connect support URL
 
@@ -14,6 +15,10 @@ Replace these placeholders if needed:
 
 - `support@playstellarrush.com` in `privacy-policy.html` and `support.html`
 - `href="#"` for the App Store button in `index.html` once the app has a live App Store URL
+
+## Supabase Leaderboards
+
+Run `supabase_migrate_website_leaderboards.sql` in Supabase Dashboard > SQL Editor to create read-only public views for the website. The page falls back to the existing app tables, but the views are the cleaner production path.
 
 ## App Store Connect URLs
 

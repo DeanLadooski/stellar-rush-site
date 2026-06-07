@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Live Stellar Rush leaderboards powered by Supabase.">
+    <meta property="og:title" content="Stellar Rush Leaderboards">
+    <meta property="og:description" content="See the top Stellar Rush pilots for score, captures, altitude, and today's daily challenge.">
+    <meta property="og:image" content="/assets/app-icon.png">
+    <title>Leaderboards | Stellar Rush</title>
+    <link rel="icon" href="/assets/app-icon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="leaderboards.js" defer></script>
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="Stellar Rush home">
+          <img src="/assets/app-icon.png" alt="">
+          <span>Stellar Rush</span>
+        </a>
+        <div class="nav-links">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link active" href="leaderboards.html">Leaderboards</a>
+          <a class="nav-link" href="privacy-policy.html">Privacy</a>
+          <a class="nav-link" href="support.html">Support</a>
+        </div>
+      </nav>
+
+      <main class="leaderboard-page">
+        <section class="leaderboard-shell">
+          <div class="leaderboard-hero">
+            <div>
+              <span class="eyebrow">Live rankings</span>
+              <h1>Leaderboards</h1>
+              <p>
+                The top synced Stellar Rush runs from Supabase. Rankings update automatically as players come online
+                and their best eligible runs are submitted.
+              </p>
+            </div>
+            <img src="/assets/app-icon.png" alt="" aria-hidden="true">
+          </div>
+
+          <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard categories">
+            <button class="leaderboard-tab active" type="button" data-board="overall">Score</button>
+            <button class="leaderboard-tab" type="button" data-board="captures">Captures</button>
+            <button class="leaderboard-tab" type="button" data-board="altitude">Altitude</button>
+            <button class="leaderboard-tab" type="button" data-board="daily">Daily</button>
+            <button class="leaderboard-tab" type="button" data-board="winners">Daily Winners</button>
+          </div>
+
+          <div class="leaderboard-meta">
+            <span id="leaderboardTitle">Top 50 Score Runs</span>
+            <span id="leaderboardStatus">Loading...</span>
+          </div>
+
+          <div class="leaderboard-table-wrap" aria-live="polite">
+            <table class="leaderboard-table">
+              <thead>
+                <tr id="leaderboardHead">
+                  <th>Rank</th>
+                  <th>Pilot</th>
+                  <th>Score</th>
+                  <th class="optional">Captures</th>
+                  <th class="optional">Altitude</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardRows">
+                <tr>
+                  <td colspan="5" class="leaderboard-empty">Loading leaderboard...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>© 2026 Stellar Rush. All rights reserved.</span>
+        <span>
+          <a href="index.html">Home</a>
+          ·
+          <a href="privacy-policy.html">Privacy Policy</a>
+          ·
+          <a href="support.html">Support</a>
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>
