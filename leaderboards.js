@@ -2,23 +2,25 @@ const SUPABASE_URL = "https://jmruseifgkteqieyrwoj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_0iFtkpGCJ6CATvE7MQxI1A_6k51B7_A";
 
 const BOARD_CONFIG = {
-  overall: {
+  score: {
     title: "Top 50 Score Runs",
     table: "public_leaderboard_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
-    order: "run_value.desc,created_at.asc",
+    order: "score.desc,created_at.asc",
+    select: "player_name,score,challenge_id,created_at",
     mainLabel: "Score",
-    value: (row) => row.run_value
+    value: (row) => row.score
   },
   captures: {
     title: "Top 50 Captures",
     table: "public_leaderboard_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
-    order: "score.desc,created_at.asc",
+    order: "objects_captured.desc,created_at.asc",
+    select: "player_name,objects_captured,challenge_id,created_at",
     mainLabel: "Captures",
-    value: (row) => row.score
+    value: (row) => row.objects_captured
   },
   altitude: {
     title: "Top 50 Altitude Runs",
@@ -26,6 +28,7 @@ const BOARD_CONFIG = {
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
     order: "highest_altitude.desc,created_at.asc",
+    select: "player_name,highest_altitude,challenge_id,created_at",
     mainLabel: "Altitude",
     value: (row) => row.highest_altitude
   },
@@ -35,7 +38,8 @@ const BOARD_CONFIG = {
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: `eq.${dailyChallengeID()}` },
     order: "run_value.desc,created_at.asc",
-    mainLabel: "Daily",
+    select: "player_name,run_value,challenge_id,created_at",
+    mainLabel: "Daily Score",
     value: (row) => row.run_value
   },
   winners: {
@@ -43,7 +47,8 @@ const BOARD_CONFIG = {
     table: "public_daily_winners",
     fallbackTable: "daily_winners",
     order: "challenge_id.desc",
-    mainLabel: "Score",
+    select: "player_name,run_value,challenge_id,created_at",
+    mainLabel: "Daily Score",
     value: (row) => row.run_value,
     winners: true
   }
@@ -63,13 +68,13 @@ tabs.forEach((tab) => {
   });
 });
 
-loadBoard("overall");
+loadBoard("score");
 
 async function loadBoard(boardKey) {
-  const config = BOARD_CONFIG[boardKey] || BOARD_CONFIG.overall;
+  const config = BOARD_CONFIG[boardKey] || BOARD_CONFIG.score;
   title.textContent = config.title;
   status.textContent = "Loading...";
-  rows.innerHTML = `<tr><td colspan="5" class="leaderboard-empty">Loading leaderboard...</td></tr>`;
+  rows.innerHTML = `<tr><td colspan="3" class="leaderboard-empty">Loading leaderboard...</td></tr>`;
   renderHead(config);
 
   try {
@@ -86,7 +91,7 @@ async function loadBoard(boardKey) {
   } catch (error) {
     rows.innerHTML = `
       <tr>
-        <td colspan="5" class="leaderboard-empty">
+        <td colspan="3" class="leaderboard-empty">
           Leaderboard unavailable. Run the website leaderboard SQL migration in Supabase, then refresh.
         </td>
       </tr>
@@ -97,7 +102,7 @@ async function loadBoard(boardKey) {
 
 async function fetchRows(table, config) {
   const params = new URLSearchParams({
-    select: "player_name,score,highest_altitude,objects_captured,run_value,challenge_id,created_at",
+    select: config.select,
     order: config.order,
     limit: "50"
   });
@@ -126,8 +131,6 @@ function renderHead(config) {
       <th>Day</th>
       <th>Pilot</th>
       <th>${config.mainLabel}</th>
-      <th class="optional">Captures</th>
-      <th class="optional">Altitude</th>
     `;
     return;
   }
@@ -136,26 +139,23 @@ function renderHead(config) {
     <th>Rank</th>
     <th>Pilot</th>
     <th>${config.mainLabel}</th>
-    <th class="optional">Captures</th>
-    <th class="optional">Altitude</th>
   `;
 }
 
 function renderRows(data, config) {
   if (!data.length) {
-    rows.innerHTML = `<tr><td colspan="5" class="leaderboard-empty">No synced runs yet.</td></tr>`;
+    rows.innerHTML = `<tr><td colspan="3" class="leaderboard-empty">No synced runs yet.</td></tr>`;
     return;
   }
 
   rows.innerHTML = data.map((row, index) => {
     const firstCell = config.winners ? shortDate(row.challenge_id) : `#${index + 1}`;
+    const rankClass = index < 3 && !config.winners ? ` rank-${index + 1}` : "";
     return `
       <tr>
-        <td>${escapeHTML(firstCell)}</td>
-        <td>${escapeHTML(row.player_name || "Unknown")}</td>
-        <td>${formatNumber(config.value(row) || 0)}</td>
-        <td class="optional">${formatNumber(row.score || row.objects_captured || 0)}</td>
-        <td class="optional">${formatNumber(row.highest_altitude || 0)}</td>
+        <td><span class="rank-pill${rankClass}">${escapeHTML(firstCell)}</span></td>
+        <td><span class="pilot-name">${escapeHTML(row.player_name || "Unknown")}</span></td>
+        <td><span class="score-value">${formatNumber(config.value(row) || 0)}</span></td>
       </tr>
     `;
   }).join("");

@@ -9,8 +9,8 @@
     <meta property="og:image" content="/assets/app-icon.png">
     <title>Leaderboards | Stellar Rush</title>
     <link rel="icon" href="/assets/app-icon.png">
-    <link rel="stylesheet" href="styles.css">
-    <script src="leaderboards.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20260607b">
+    <script src="leaderboards.js?v=20260607b" defer></script>
   </head>
   <body>
     <div class="page">
@@ -38,11 +38,10 @@
                 and their best eligible runs are submitted.
               </p>
             </div>
-            <img src="/assets/app-icon.png" alt="" aria-hidden="true">
           </div>
 
           <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard categories">
-            <button class="leaderboard-tab active" type="button" data-board="overall">Score</button>
+            <button class="leaderboard-tab active" type="button" data-board="score">Score</button>
             <button class="leaderboard-tab" type="button" data-board="captures">Captures</button>
             <button class="leaderboard-tab" type="button" data-board="altitude">Altitude</button>
             <button class="leaderboard-tab" type="button" data-board="daily">Daily</button>
@@ -61,13 +60,11 @@
                   <th>Rank</th>
                   <th>Pilot</th>
                   <th>Score</th>
-                  <th class="optional">Captures</th>
-                  <th class="optional">Altitude</th>
                 </tr>
               </thead>
               <tbody id="leaderboardRows">
                 <tr>
-                  <td colspan="5" class="leaderboard-empty">Loading leaderboard...</td>
+                  <td colspan="3" class="leaderboard-empty">Loading leaderboard...</td>
                 </tr>
               </tbody>
             </table>
