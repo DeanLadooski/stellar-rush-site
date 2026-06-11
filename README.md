@@ -18,7 +18,7 @@ Replace these placeholders if needed:
 
 ## Supabase Leaderboards
 
-Run `supabase_migrate_website_leaderboards.sql` in Supabase Dashboard > SQL Editor to create read-only public views for the website. The page falls back to the existing app tables, but the views are the cleaner production path.
+Run `supabase_migrate_website_leaderboards.sql` in Supabase Dashboard > SQL Editor to create read-only public views for the website. The primary views keep each pilot's top run for the selected ranking, matching the app leaderboards. The page falls back to the existing app tables and dedupes in JavaScript, but the views are the cleaner production path.
 
 ## App Store Connect URLs
 

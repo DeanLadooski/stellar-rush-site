@@ -3,46 +3,48 @@ const SUPABASE_KEY = "sb_publishable_0iFtkpGCJ6CATvE7MQxI1A_6k51B7_A";
 
 const BOARD_CONFIG = {
   score: {
-    title: "Top 50 Score Runs",
-    table: "public_leaderboard_runs",
+    title: "Top 50 Scores",
+    table: "public_leaderboard_score_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
     order: "website_score.desc,created_at.asc",
     fallbackOrder: "run_value.desc,created_at.asc",
-    select: "player_name,score,highest_altitude,website_score,challenge_id,created_at",
-    fallbackSelect: "player_name,score,highest_altitude,challenge_id,created_at",
+    select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,objects_captured,challenge_id,created_at",
     mainLabel: "Score",
     value: adjustedScore
   },
   captures: {
     title: "Top 50 Captures",
-    table: "public_leaderboard_runs",
+    table: "public_leaderboard_capture_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
     order: "objects_captured.desc,created_at.asc",
-    select: "player_name,objects_captured,challenge_id,created_at",
+    select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,objects_captured,challenge_id,created_at",
     mainLabel: "Captures",
-    value: (row) => row.objects_captured
+    value: (row) => row.objects_captured ?? row.score
   },
   altitude: {
     title: "Top 50 Altitude Runs",
-    table: "public_leaderboard_runs",
+    table: "public_leaderboard_altitude_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
     order: "highest_altitude.desc,created_at.asc",
-    select: "player_name,highest_altitude,challenge_id,created_at",
+    select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,objects_captured,challenge_id,created_at",
     mainLabel: "Altitude",
     value: (row) => row.highest_altitude
   },
   daily: {
     title: "Today's Daily Challenge",
-    table: "public_leaderboard_runs",
+    table: "public_leaderboard_daily_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: `eq.${dailyChallengeID()}` },
     order: "website_score.desc,created_at.asc",
     fallbackOrder: "run_value.desc,created_at.asc",
-    select: "player_name,score,highest_altitude,website_score,challenge_id,created_at",
-    fallbackSelect: "player_name,score,highest_altitude,challenge_id,created_at",
+    select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
+    fallbackSelect: "player_name,score,highest_altitude,objects_captured,challenge_id,created_at",
     mainLabel: "Daily Score",
     value: adjustedScore
   },
@@ -91,6 +93,10 @@ async function loadBoard(boardKey) {
       data = await fetchRows(config.fallbackTable, config, true);
     }
 
+    if (!config.winners) {
+      data = bestRowsByPilot(data, config).slice(0, 50);
+    }
+
     renderRows(data, config);
     status.textContent = data.length ? `Showing ${data.length}` : "No runs yet";
   } catch (error) {
@@ -109,7 +115,7 @@ async function fetchRows(table, config, useFallback = false) {
   const params = new URLSearchParams({
     select: useFallback ? (config.fallbackSelect || config.select) : config.select,
     order: useFallback ? (config.fallbackOrder || config.order) : config.order,
-    limit: "50"
+    limit: useFallback ? "500" : "50"
   });
 
   Object.entries(config.filters || {}).forEach(([key, value]) => {
@@ -128,6 +134,47 @@ async function fetchRows(table, config, useFallback = false) {
   }
 
   return response.json();
+}
+
+function bestRowsByPilot(data, config) {
+  const best = new Map();
+
+  data.forEach((row) => {
+    const key = normalizedPilotName(row.player_name);
+    if (!key) return;
+
+    const current = best.get(key);
+    if (!current || isBetterRow(row, current, config)) {
+      best.set(key, row);
+    }
+  });
+
+  return Array.from(best.values()).sort((left, right) => {
+    const leftValue = Number(config.value(left) || 0);
+    const rightValue = Number(config.value(right) || 0);
+    if (leftValue !== rightValue) {
+      return rightValue - leftValue;
+    }
+    return runDate(left) - runDate(right);
+  });
+}
+
+function isBetterRow(candidate, current, config) {
+  const candidateValue = Number(config.value(candidate) || 0);
+  const currentValue = Number(config.value(current) || 0);
+  if (candidateValue !== currentValue) {
+    return candidateValue > currentValue;
+  }
+  return runDate(candidate) < runDate(current);
+}
+
+function normalizedPilotName(name) {
+  return String(name || "").trim().toLowerCase();
+}
+
+function runDate(row) {
+  const time = Date.parse(row.created_at || "");
+  return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
 }
 
 function renderHead(config) {
