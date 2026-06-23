@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Join a Stellar Rush 1v1 challenge.">
+    <meta property="og:title" content="Stellar Rush 1v1 Challenge">
+    <meta property="og:description" content="You were invited to a live 1v1 Stellar Rush match.">
+    <meta property="og:image" content="/assets/app-icon.png">
+    <title>Stellar Rush | 1v1 Challenge</title>
+    <link rel="icon" href="/assets/app-icon.png">
+    <link rel="stylesheet" href="styles.css?v=20260607c">
+    <style>
+      .challenge-page {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1rem;
+        background:
+          linear-gradient(180deg, rgba(3, 8, 21, 0.18), rgba(3, 8, 21, 0.74)),
+          url("/assets/menu-background.png") center / cover no-repeat;
+      }
+
+      .challenge-card {
+        width: min(34rem, 100%);
+        padding: clamp(1.5rem, 6vw, 2.4rem);
+        text-align: center;
+        border: 1px solid rgba(138, 205, 255, 0.28);
+        border-radius: 1.55rem;
+        background: rgba(5, 11, 27, 0.78);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 2.2rem 5rem rgba(0, 0, 0, 0.54);
+        backdrop-filter: blur(18px);
+      }
+
+      .challenge-icon {
+        width: 5.8rem;
+        height: 5.8rem;
+        border-radius: 1.35rem;
+        box-shadow: 0 1rem 3rem rgba(255, 126, 38, 0.32);
+      }
+
+      .challenge-card h1 {
+        max-width: none;
+        margin: 1.1rem 0 0.65rem;
+        font-size: clamp(2.45rem, 10vw, 4.4rem);
+        line-height: 0.96;
+      }
+
+      .challenge-card p {
+        margin: 0 auto;
+        max-width: 27rem;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .challenge-actions {
+        display: grid;
+        gap: 0.8rem;
+        margin-top: 1.6rem;
+      }
+
+      .challenge-code {
+        margin-top: 1rem;
+        color: var(--soft);
+        font-size: 0.92rem;
+      }
+
+      .challenge-code strong {
+        color: var(--gold);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="challenge-page">
+      <section class="challenge-card" aria-labelledby="challenge-title">
+        <img class="challenge-icon" src="/assets/app-icon.png" alt="">
+        <span class="eyebrow">1v1 invite</span>
+        <h1 id="challenge-title">Join the challenge.</h1>
+        <p>
+          Open Stellar Rush to accept this head-to-head match. If the app is not installed, download it free from the App Store.
+        </p>
+        <div class="challenge-actions">
+          <a class="button primary" id="open-app" href="https://apps.apple.com/us/app/stellar-rush/id6776950711">Open Challenge</a>
+          <a class="button" href="https://apps.apple.com/us/app/stellar-rush/id6776950711">Download on the App Store</a>
+        </div>
+        <p class="challenge-code" id="challenge-code"></p>
+      </section>
+    </main>
+
+    <script>
+      const appStoreURL = "https://apps.apple.com/us/app/stellar-rush/id6776950711";
+      const params = new URLSearchParams(window.location.search);
+      const codeFromQuery = params.get("code") || "";
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      const codeFromPath = pathParts[0] === "challenge" ? pathParts[1] || "" : "";
+      const code = (codeFromQuery || codeFromPath).replace(/[^A-Za-z0-9-]/g, "").slice(0, 36);
+      const openButton = document.getElementById("open-app");
+      const codeLabel = document.getElementById("challenge-code");
+      const deepLink = code ? `stellarrush://pvp/${encodeURIComponent(code)}` : "";
+      let appOpened = false;
+
+      if (code) {
+        openButton.href = deepLink;
+        codeLabel.innerHTML = `Challenge code: <strong>${code}</strong>`;
+      } else {
+        openButton.textContent = "Download Stellar Rush";
+        openButton.href = appStoreURL;
+        codeLabel.textContent = "Challenge code missing. Download Stellar Rush and ask your friend to resend the invite.";
+      }
+
+      window.addEventListener("pagehide", () => {
+        appOpened = true;
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          appOpened = true;
+        }
+      });
+
+      function openChallenge(event) {
+        if (!deepLink) {
+          return;
+        }
+        event.preventDefault();
+        appOpened = false;
+        window.location.href = deepLink;
+        window.setTimeout(() => {
+          if (!appOpened && !document.hidden) {
+            window.location.href = appStoreURL;
+          }
+        }, 1400);
+      }
+
+      openButton.addEventListener("click", openChallenge);
+
+      if (deepLink) {
+        window.setTimeout(() => {
+          openButton.click();
+        }, 450);
+      }
+    </script>
+  </body>
+</html>
