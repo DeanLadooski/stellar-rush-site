@@ -7,6 +7,7 @@ const BOARD_CONFIG = {
     table: "public_leaderboard_score_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
+    fallbackFilters: { challenge_id: "is.null", mode_key: "not.like.campaign.level.%" },
     order: "website_score.desc,created_at.asc",
     fallbackOrder: "run_value.desc,created_at.asc",
     select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
@@ -19,6 +20,7 @@ const BOARD_CONFIG = {
     table: "public_leaderboard_capture_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
+    fallbackFilters: { challenge_id: "is.null", mode_key: "not.like.campaign.level.%" },
     order: "objects_captured.desc,created_at.asc",
     select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
     fallbackSelect: "player_name,score,highest_altitude,objects_captured,challenge_id,created_at",
@@ -30,6 +32,7 @@ const BOARD_CONFIG = {
     table: "public_leaderboard_altitude_runs",
     fallbackTable: "leaderboard_runs",
     filters: { challenge_id: "is.null" },
+    fallbackFilters: { challenge_id: "is.null", mode_key: "not.like.campaign.level.%" },
     order: "highest_altitude.desc,created_at.asc",
     select: "player_name,score,highest_altitude,objects_captured,website_score,challenge_id,created_at",
     fallbackSelect: "player_name,score,highest_altitude,objects_captured,challenge_id,created_at",
@@ -118,7 +121,8 @@ async function fetchRows(table, config, useFallback = false) {
     limit: useFallback ? "500" : "50"
   });
 
-  Object.entries(config.filters || {}).forEach(([key, value]) => {
+  const filters = useFallback ? (config.fallbackFilters || config.filters) : config.filters;
+  Object.entries(filters || {}).forEach(([key, value]) => {
     params.set(key, value);
   });
 
