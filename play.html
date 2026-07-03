@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Play Stellar Rush instantly on web. Tap to launch, chain orbits, and escape the rising sun.">
+    <meta property="og:title" content="Play Stellar Rush">
+    <meta property="og:description" content="Just one more run, right in your browser.">
+    <meta property="og:image" content="assets/app-icon.png">
+    <title>Play Now | Stellar Rush</title>
+    <link rel="icon" href="assets/app-icon.png">
+    <link rel="stylesheet" href="styles.css?v=20260703b">
+    <script src="web-game.js?v=20260703b" defer></script>
+  </head>
+  <body class="play-body">
+    <div class="page play-page">
+      <nav class="nav play-nav" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="Stellar Rush home">
+          <img src="assets/app-icon.png" alt="">
+          <span>Stellar Rush</span>
+        </a>
+        <div class="nav-links">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link active" href="play.html">Play Now</a>
+          <a class="nav-link" href="leaderboards.html">Leaderboards</a>
+          <a class="nav-link" href="privacy-policy.html">Privacy</a>
+          <a class="nav-link" href="support.html">Support</a>
+        </div>
+      </nav>
+
+      <main class="web-game-shell">
+        <section class="web-game-panel" aria-label="Playable Stellar Rush web game">
+          <div class="web-game-copy">
+            <span class="eyebrow">Online web run</span>
+            <h1>Play Now</h1>
+            <p>
+              Tap or click once to release. While flying, tap left or right for a small thruster turn.
+              Keep climbing before the sun reaches you.
+            </p>
+            <div class="web-game-stats" aria-live="polite">
+              <span id="webBestScore">Best Score 0</span>
+              <span id="webBestAltitude">Best Alt 0</span>
+              <span id="webBestCaptures">Best Captures 0</span>
+              <span id="webConnection">Checking connection...</span>
+            </div>
+          </div>
+
+          <div class="web-game-frame">
+            <canvas id="stellarRushCanvas" width="430" height="760" aria-label="Stellar Rush playable canvas"></canvas>
+            <div id="webGameOverlay" class="web-game-overlay">
+              <div class="web-overlay-card">
+                <img src="assets/app-icon.png" alt="">
+                <strong id="webOverlayTitle">Stellar Rush</strong>
+                <span id="webOverlaySubtitle">Just One More Run.</span>
+
+                <form id="webAuthForm" class="web-panel-section web-auth-form" autocomplete="on">
+                  <label>
+                    Username
+                    <input id="webUsername" name="username" type="text" inputmode="text" autocomplete="username" maxlength="18" required>
+                  </label>
+                  <label>
+                    Password
+                    <input id="webPassword" name="password" type="password" autocomplete="current-password" minlength="6" required>
+                  </label>
+                  <label id="webConfirmWrap" class="hidden">
+                    Confirm Password
+                    <input id="webConfirmPassword" name="confirm-password" type="password" autocomplete="new-password" minlength="6">
+                  </label>
+                  <button id="webAuthPrimary" type="submit">Log In</button>
+                  <button id="webAuthToggle" class="secondary" type="button">Create Account</button>
+                  <p id="webAuthMessage" class="web-form-message" aria-live="polite"></p>
+                </form>
+
+                <div id="webMenuActions" class="web-panel-section hidden">
+                  <p id="webAccountStatus" class="web-account-status"></p>
+                  <button id="webGameStart" class="web-primary-action" type="button">
+                    <span>Endless</span>
+                    <small>Ranked For Leaderboards</small>
+                  </button>
+                  <a class="web-menu-link" href="leaderboards.html">Leaderboards</a>
+                  <button id="webShipSelectButton" class="secondary" type="button">Ship Select</button>
+                  <button id="webAccountButton" class="secondary" type="button">Account</button>
+                </div>
+
+                <div id="webShipSelectPanel" class="web-panel-section web-ship-select-panel hidden">
+                  <p id="webShipSelectStatus" class="web-account-status"></p>
+                  <div id="webShipGrid" class="web-ship-grid" aria-label="Ship skins"></div>
+                  <button id="webShipSelectBack" type="button">Home</button>
+                </div>
+
+                <div id="webAccountPanel" class="web-panel-section hidden">
+                  <p id="webAccountDetails" class="web-account-status"></p>
+                  <button id="webAccountBack" type="button">Home</button>
+                  <button id="webLogoutButton" class="secondary" type="button">Log Out</button>
+                </div>
+
+                <div id="webGameOverActions" class="web-panel-section hidden">
+                  <div class="web-run-stats" aria-live="polite">
+                    <span id="webRunScore">Score 0</span>
+                    <span id="webRunAltitude">Altitude 0</span>
+                    <span id="webRunCaptures">Captures 0</span>
+                    <span id="webRunSync">Saving...</span>
+                  </div>
+                  <button id="webGameRetry" type="button">Try Again</button>
+                  <button id="webGameHome" class="secondary" type="button">Home</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

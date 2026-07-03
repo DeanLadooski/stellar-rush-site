@@ -5,7 +5,9 @@ This is a static website for Stellar Rush. It can be hosted on GitHub Pages, Net
 ## Pages
 
 - `index.html` - marketing home page
+- `play.html` - online browser-playable web version
 - `leaderboards.html` - public Supabase-powered leaderboards
+- `challenge.html` - 1v1 challenge invite landing page
 - `app-ads.txt` - AdMob authorized sellers verification file
 - `privacy-policy.html` - App Store Connect privacy policy URL
 - `support.html` - App Store Connect support URL
@@ -25,8 +27,8 @@ Run `supabase_migrate_website_leaderboards.sql` in Supabase Dashboard > SQL Edit
 After hosting, use URLs like:
 
 - Marketing URL / Developer Website URL: `https://playstellarrush.com`
-- Privacy Policy URL: `https://your-domain.com/privacy-policy.html`
-- Support URL: `https://your-domain.com/support.html`
+- Privacy Policy URL: `https://playstellarrush.com/privacy-policy.html`
+- Support URL: `https://playstellarrush.com/support.html`
 
 ## AdMob app-ads.txt
 
